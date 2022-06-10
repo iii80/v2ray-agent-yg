@@ -716,10 +716,6 @@ fi
 	fi
 	if [[ ! -d "$HOME/.acme.sh" ]] || [[ -d "$HOME/.acme.sh" && -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
 		echoContent green " ---> 安装acme.sh"
-wget -N https://github.com/Neilpang/acme.sh/archive/master.tar.gz >/dev/null 2>&1
-tar -zxvf master.tar.gz >/dev/null 2>&1
-cd acme.sh-master >/dev/null 2>&1
-./acme.sh --install >/dev/null 2>&1
 		curl -s https://get.acme.sh | sh -s >/etc/v2ray-agent/tls/acme.log 2>&1
 		if [[ ! -d "$HOME/.acme.sh" ]] || [[ -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
 			echoContent red "  acme安装失败--->"
