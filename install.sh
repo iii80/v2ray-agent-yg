@@ -608,15 +608,15 @@ fi
 
 	if ! find /usr/bin /usr/sbin | grep -q -w curl; then
 		echoContent green " ---> 安装curl"
-		${installType} curl >/dev/null 2>&1
+		${installType} curl >/dev/null 2>&1	
+	fi
 if [[ -z $(grep 'DiG 9' /etc/hosts) ]]; then
 v4=$(curl -s4m3 https://ip.gs -k)
 if [ -z $v4 ]; then
 echo -e "${green}检测到VPS为纯IPV6 Only,添加dns64${plain}\n"
 echo -e nameserver 2a01:4f8:c2c:123f::1 > /etc/resolv.conf
 fi
-fi	
-	fi
+fi
 
 	if ! find /usr/bin /usr/sbin | grep -q -w unzip; then
 		echoContent green " ---> 安装unzip"
@@ -714,9 +714,12 @@ fi
 
 		fi
 	fi
-
 	if [[ ! -d "$HOME/.acme.sh" ]] || [[ -d "$HOME/.acme.sh" && -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
 		echoContent green " ---> 安装acme.sh"
+wget -N https://github.com/Neilpang/acme.sh/archive/master.tar.gz
+tar -zxvf master.tar.gz
+cd acme.sh-master
+./acme.sh --install
 		curl -s https://get.acme.sh | sh -s >/etc/v2ray-agent/tls/acme.log 2>&1
 		if [[ ! -d "$HOME/.acme.sh" ]] || [[ -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
 			echoContent red "  acme安装失败--->"
