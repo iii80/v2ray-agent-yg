@@ -1837,7 +1837,8 @@ initV2RayConfig() {
 }
 EOF
 	# outbounds
-	if [[ -n "${pingIPv6}" ]]; then
+v4=$(curl -s4m5 https://ip.gs -k)
+	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
 {
     "outbounds": [
@@ -2246,7 +2247,8 @@ initXrayConfig() {
 EOF
 
 	# outbounds
-	if [[ -n "${pingIPv6}" ]]; then
+v4=$(curl -s4m5 https://ip.gs -k)
+	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
 {
     "outbounds": [
