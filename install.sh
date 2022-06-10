@@ -586,6 +586,7 @@ systemctl disable apache2 >/dev/null 2>&1
 	fi
 
 	if [[ "${release}" == "centos" ]]; then
+	yellow "当前是Centos系统，更新系统至少2分钟，请耐心等待"
 		rm -rf /var/run/yum.pid
 vsid=`grep -i version_id /etc/os-release | cut -d \" -f2 | cut -d . -f1`
 if [[ ${vsid} =~ 8 ]]; then
