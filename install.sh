@@ -1233,6 +1233,13 @@ handleNginx() {
 		fi
 		echoContent green " ---> Nginx关闭成功"
 	fi
+if [[ -n $(lsof -i :80|grep -v "PID") ]]; then
+yellow "检测到80端口被占用，现执行80端口全释放"
+sleep 2
+lsof -i :80|grep -v "PID"|awk '{print "kill -9",$2}'|sh >/dev/null 2>&1
+green "80端口全释放完毕！"
+sleep 2
+fi
 }
 
 # 定时任务更新tls证书
