@@ -2,6 +2,12 @@
 
 一键脚本：
 
+bitbucket版
+```
+wget -N https://bitbucket.org/rwkgyg/v2ray-agent/raw/master/install.sh && bash install.sh
+```
+
+github版
 ```
 wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/rwkgyg/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
 ```
