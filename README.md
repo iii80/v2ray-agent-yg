@@ -2,15 +2,16 @@
 
 一键脚本：
 
+gitlab版
+```
+wget -N https://gitlab.com/renweikg/v2ray-agent/raw/master/install.sh && bash install.sh
+```
+
 bitbucket版
 ```
 wget -N https://bitbucket.org/rwkgyg/v2ray-agent/raw/master/install.sh && bash install.sh
 ```
 
-github版
-```
-wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/rwkgyg/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
-```
 
 > [感谢 JetBrains 提供的非商业开源软件开发授权](https://www.jetbrains.com/?from=v2ray-agent)
 
