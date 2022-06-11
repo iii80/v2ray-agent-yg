@@ -3,14 +3,8 @@
 对纯V6进行了优化
 一键脚本：
 
-gitlab版
 ```
 wget -N https://gitlab.com/rwkgyg/v2ray-agent/raw/master/install.sh && bash install.sh
-```
-
-bitbucket版
-```
-wget -N https://bitbucket.org/rwkgyg/v2ray-agent/raw/master/install.sh && bash install.sh
 ```
 
 
