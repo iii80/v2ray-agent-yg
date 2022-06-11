@@ -4,7 +4,7 @@
 
 gitlab版
 ```
-wget -N https://gitlab.com/renweikg/v2ray-agent/raw/master/install.sh && bash install.sh
+wget -N https://gitlab.com/rwkgyg/v2ray-agent/raw/master/install.sh && bash install.sh
 ```
 
 bitbucket版
