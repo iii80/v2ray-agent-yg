@@ -1,5 +1,6 @@
 # v2ray-agent
 
+对纯V6进行了优化
 一键脚本：
 
 gitlab版
