@@ -1837,7 +1837,9 @@ initV2RayConfig() {
 }
 EOF
 	# outbounds
-
+wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
 v4=$(curl -s4m5 https://ip.gs -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
@@ -1878,6 +1880,50 @@ EOF
 }
 EOF
 	fi
+else
+systemctl stop wg-quick@wgcf >/dev/null 2>&1
+v4=$(curl -s4m5 https://ip.gs -k)
+	if [[ -z "${v4}" ]]; then
+		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
+{
+    "outbounds": [
+        {
+          "protocol": "freedom",
+          "settings": {},
+          "tag": "direct"
+        }
+    ]
+}
+EOF
+
+	else
+		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv4_outbounds.json
+{
+    "outbounds":[
+        {
+            "protocol":"freedom",
+            "settings":{
+                "domainStrategy":"UseIPv4"
+            },
+            "tag":"IPv4-out"
+        },
+        {
+            "protocol":"freedom",
+            "settings":{
+                "domainStrategy":"UseIPv6"
+            },
+            "tag":"IPv6-out"
+        },
+        {
+            "protocol":"blackhole",
+            "tag":"blackhole-out"
+        }
+    ]
+}
+EOF
+	fi
+systemctl start wg-quick@wgcf >/dev/null 2>&1
+fi	
 
 
 	# dns
@@ -2249,6 +2295,9 @@ initXrayConfig() {
 EOF
 
 	# outbounds
+wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then	
 v4=$(curl -s4m5 https://ip.gs -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
@@ -2289,6 +2338,52 @@ EOF
 }
 EOF
 	fi
+else
+systemctl stop wg-quick@wgcf >/dev/null 2>&1
+v4=$(curl -s4m5 https://ip.gs -k)
+	if [[ -z "${v4}" ]]; then
+		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
+{
+    "outbounds": [
+        {
+          "protocol": "freedom",
+          "settings": {},
+          "tag": "direct"
+        }
+    ]
+}
+EOF
+
+	else
+		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv4_outbounds.json
+{
+    "outbounds":[
+        {
+            "protocol":"freedom",
+            "settings":{
+                "domainStrategy":"UseIPv4"
+            },
+            "tag":"IPv4-out"
+        },
+        {
+            "protocol":"freedom",
+            "settings":{
+                "domainStrategy":"UseIPv6"
+            },
+            "tag":"IPv6-out"
+        },
+        {
+            "protocol":"blackhole",
+            "tag":"blackhole-out"
+        }
+    ]
+}
+EOF
+	fi
+systemctl start wg-quick@wgcf >/dev/null 2>&1
+fi
+
+
 
 	# dns
 	cat <<EOF >/etc/v2ray-agent/xray/conf/11_dns.json
@@ -4590,9 +4685,6 @@ selectCoreInstall() {
 
 # v2ray-core 安装
 v2rayCoreInstall() {
-wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
-wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
-if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
 	cleanUp xrayClean
 	selectCustomInstallType=
 	totalProgress=13
@@ -4618,44 +4710,11 @@ if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
 	handleNginx start
 	# 生成账号
 	checkGFWStatue 12
-	showAccounts 13
-else
-systemctl stop wg-quick@wgcf >/dev/null 2>&1
-    cleanUp xrayClean
-	selectCustomInstallType=
-	totalProgress=13
-	installTools 2
-	# 申请tls
-	initTLSNginxConfig 3
-	installTLS 4
-	handleNginx stop
-	#	initNginxConfig 5
-	randomPathFunction 5
-	# 安装V2Ray
-	installV2Ray 6
-	installV2RayService 7
-	customCDNIP 8
-	initV2RayConfig all 9
-	cleanUp xrayDel
-	installCronTLS 10
-	nginxBlog 11
-	updateRedirectNginxConf
-	handleV2Ray stop
-	sleep 2
-	handleV2Ray start
-	handleNginx start
-	# 生成账号
-	checkGFWStatue 12
 	showAccounts 13	
-systemctl start wg-quick@wgcf >/dev/null 2>&1
-fi	
 }
 
 # xray-core 安装
 xrayCoreInstall() {
-wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
-wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
-if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then	
 	cleanUp v2rayClean
 	selectCustomInstallType=
 	totalProgress=13
@@ -4682,36 +4741,6 @@ if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
 	# 生成账号
 	checkGFWStatue 12
 	showAccounts 13
-else
-systemctl stop wg-quick@wgcf >/dev/null 2>&1
-    cleanUp v2rayClean
-	selectCustomInstallType=
-	totalProgress=13
-	installTools 2
-	# 申请tls
-	initTLSNginxConfig 3
-	installTLS 4
-	handleNginx stop
-	randomPathFunction 5
-	# 安装Xray
-	# handleV2Ray stop
-	installXray 6
-	installXrayService 7
-	customCDNIP 8
-	initXrayConfig all 9
-	cleanUp v2rayDel
-	installCronTLS 10
-	nginxBlog 11
-	updateRedirectNginxConf
-	handleXray stop
-	sleep 2
-	handleXray start
-	handleNginx start
-	# 生成账号
-	checkGFWStatue 12
-	showAccounts 13
-systemctl start wg-quick@wgcf >/dev/null 2>&1
-fi
 }
 
 # 核心管理
