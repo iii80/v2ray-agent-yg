@@ -4710,7 +4710,7 @@ v2rayCoreInstall() {
 	handleNginx start
 	# 生成账号
 	checkGFWStatue 12
-	showAccounts 13	
+	showAccounts 13
 }
 
 # xray-core 安装
@@ -4737,6 +4737,7 @@ xrayCoreInstall() {
 	handleXray stop
 	sleep 2
 	handleXray start
+
 	handleNginx start
 	# 生成账号
 	checkGFWStatue 12
