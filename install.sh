@@ -1837,6 +1837,10 @@ initV2RayConfig() {
 }
 EOF
 	# outbounds
+wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)	
+if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
+
 v4=$(curl -s4m5 https://ip.gs -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
@@ -1877,6 +1881,51 @@ EOF
 }
 EOF
 	fi
+	else
+systemctl stop wg-quick@wgcf >/dev/null 2>&1
+v4=$(curl -s4m5 https://ip.gs -k)
+	if [[ -z "${v4}" ]]; then
+		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
+{
+    "outbounds": [
+        {
+          "protocol": "freedom",
+          "settings": {},
+          "tag": "direct"
+        }
+    ]
+}
+EOF
+
+	else
+		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv4_outbounds.json
+{
+    "outbounds":[
+        {
+            "protocol":"freedom",
+            "settings":{
+                "domainStrategy":"UseIPv4"
+            },
+            "tag":"IPv4-out"
+        },
+        {
+            "protocol":"freedom",
+            "settings":{
+                "domainStrategy":"UseIPv6"
+            },
+            "tag":"IPv6-out"
+        },
+        {
+            "protocol":"blackhole",
+            "tag":"blackhole-out"
+        }
+    ]
+}
+EOF
+fi
+systemctl start wg-quick@wgcf >/dev/null 2>&1
+fi
+
 
 	# dns
 	cat <<EOF >/etc/v2ray-agent/v2ray/conf/11_dns.json
