@@ -4,7 +4,7 @@
 一键脚本：
 
 ```
-wget -N https://gitlab.com/rwkgyg/v2ray-agent/raw/master/install.sh && bash install.sh
+wget -N https://gitlab.com/rwkgyg/v2ray-agent/raw/master/install.sh && chmod +x install.sh && bash install.sh
 ```
 
 
