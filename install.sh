@@ -577,8 +577,10 @@ green "重启VPS自动开启TUN守护功能已启动"
 fi
 fi
 fi	
-systemctl stop apache2 >/dev/null 2>&1
-systemctl disable apache2 >/dev/null 2>&1	
+if [[ -n $(apachectl -v 2>/dev/null) ]]; then
+systemctl stop httpd.service >/dev/null 2>&1
+systemctl disable httpd.service >/dev/null 2>&1
+fi	
 
 	${upgrade} >/etc/v2ray-agent/install.log 2>&1
 	if grep <"/etc/v2ray-agent/install.log" -q "changed"; then
