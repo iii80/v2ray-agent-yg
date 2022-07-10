@@ -580,7 +580,9 @@ fi
 if [[ -n $(apachectl -v 2>/dev/null) ]]; then
 systemctl stop httpd.service >/dev/null 2>&1
 systemctl disable httpd.service >/dev/null 2>&1
-fi	
+service apache2 stop >/dev/null 2>&1
+systemctl disable apache2 >/dev/null 2>&1
+fi
 
 	${upgrade} >/etc/v2ray-agent/install.log 2>&1
 	if grep <"/etc/v2ray-agent/install.log" -q "changed"; then
