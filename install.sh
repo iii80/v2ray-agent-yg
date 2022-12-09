@@ -626,7 +626,7 @@ fi
 		${installType} curl >/dev/null 2>&1	
 	fi
 if [[ -z $(grep 'DiG 9' /etc/hosts) ]]; then
-v4=$(curl -s4m6 ip.p3terx.com -k | sed -n 1p)
+v4=$(curl -s4m6 api64.ipify.org -k)
 if [ -z $v4 ]; then
 echo -e "${green}检测到VPS为纯IPV6 Only,添加dns64${plain}\n"
 echo -e nameserver 2a01:4f8:c2c:123f::1 > /etc/resolv.conf
@@ -1855,7 +1855,7 @@ EOF
 wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
-v4=$(curl -s4m6 ip.p3terx.com -k | sed -n 1p)
+v4=$(curl -s4m6 api64.ipify.org -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
 {
@@ -1897,7 +1897,7 @@ EOF
 	fi
 else
 systemctl stop wg-quick@wgcf >/dev/null 2>&1
-v4=$(curl -s4m6 ip.p3terx.com -k | sed -n 1p)
+v4=$(curl -s4m6 api64.ipify.org -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
 {
@@ -2313,7 +2313,7 @@ EOF
 wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then	
-v4=$(curl -s4m6 ip.p3terx.com -k | sed -n 1p)
+v4=$(curl -s4m6 api64.ipify.org -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
 {
@@ -2355,7 +2355,7 @@ EOF
 	fi
 else
 systemctl stop wg-quick@wgcf >/dev/null 2>&1
-v4=$(curl -s4m6 ip.p3terx.com -k | sed -n 1p)
+v4=$(curl -s4m6 api64.ipify.org -k)
 	if [[ -z "${v4}" ]]; then
 		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
 {
